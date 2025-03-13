@@ -33,7 +33,7 @@ app.use("/api/coupons", couponRoutes);
 
 //start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
 
 //25 hardcode coupons
 async function seedCoupons() {
