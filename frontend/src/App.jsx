@@ -3,18 +3,23 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://roundrobin-933d.onrender.com";
+
 function App() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/coupons").then((res) => setCoupons(res.data));
+    axios.get(`${API_BASE_URL}/api/coupons`, { withCredentials: true })
+      .then((res) => setCoupons(res.data))
+      .catch(() => toast.error("Error fetching coupons"));
   }, []);
 
   const claimCoupon = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/api/coupons/claim", {}, { withCredentials: true });
+      const res = await axios.post(`${API_BASE_URL}/api/coupons/claim`, {}, { withCredentials: true });
       toast.success(res.data.message);
       setCoupons((prev) => prev.filter((c) => c.code !== res.data.code));
     } catch (err) {
@@ -33,8 +38,7 @@ function App() {
       >
         Round-Robin Coupon System
       </motion.h1>
-      
-      {/* Claim Coupon Section */}
+
       <motion.div 
         className="bg-white text-blue-700 p-6 rounded-lg shadow-lg w-full max-w-md"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -50,8 +54,7 @@ function App() {
           {loading ? "Claiming..." : "Claim Coupon"}
         </button>
       </motion.div>
-      
-      {/* Available Coupons Section */}
+
       <motion.div 
         className="mt-8 bg-white text-blue-700 p-6 rounded-lg shadow-lg w-full max-w-md"
         initial={{ opacity: 0, scale: 0.9 }}
