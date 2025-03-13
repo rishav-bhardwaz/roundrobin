@@ -8,19 +8,34 @@ import couponRoutes from "./routes/couponRoutes.js";
 
 dotenv.config();
 const app = express();
-
 connectDB().then(() => seedCoupons());
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://roundrobin-afc1a5m3v-rishav-bhardwazs-projects.vercel.app" 
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS Not Allowed"));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/coupons", couponRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
-//preload coupons
+//25 hardcode coupons
 async function seedCoupons() {
   try {
     const existingCoupons = await Coupon.countDocuments();
