@@ -12,7 +12,8 @@ connectDB().then(() => seedCoupons());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://roundrobin-afc1a5m3v-rishav-bhardwazs-projects.vercel.app" 
+  "https://roundrobin-afc1a5m3v-rishav-bhardwazs-projects.vercel.app", 
+  "https://roundrobin-livid.vercel.app/"
 ];
 
 app.use(cors({
